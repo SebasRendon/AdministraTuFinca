@@ -73,6 +73,7 @@
             
             function traerLotes()
             {
+              $('#nombre').focus();
                 $.ajax({
                     type: 'POST',
                     url: "traerLotes.htm",
@@ -103,10 +104,18 @@
                       var _datosT = eval("[" + response.split("=").join(":") + "]"); 
                              
                             $('#resultado').append("<ul>");
-                            for(var i=0; i<response.length;i++)
+                            if(response=="")
                             {
-                                $('#resultado').append("<li><a href='#' onclick=\"CargarSeleccion('"+_datosT[i].Apellido+"','"+_datosT[i].Nombre+"',"+_datosT[i].idTrabajador+","+_datosT[i].cedula+")\" > "+_datosT[i].cedula+" "+_datosT[i].Nombre+" "+_datosT[i].Apellido+"</a>  </li></ol>");
+                              $('#resultado').append("<p>Este Empleado no esta Registrado,<a href='AgregarEmpleado.htm'>  click aqui para Registrarlo</a> </p>");
                             }
+                            else
+                            {
+                               for(var i=0; i<response.length;i++)
+                                    {
+                                        $('#resultado').append("<li><a href='#' onclick=\"CargarSeleccion('"+_datosT[i].Apellido+"','"+_datosT[i].Nombre+"',"+_datosT[i].idTrabajador+","+_datosT[i].cedula+")\" > "+_datosT[i].cedula+" "+_datosT[i].Nombre+" "+_datosT[i].Apellido+"</a>  </li></ol>");
+                                    } 
+                            }
+                            
                           
                           $('#resultado').append("</ul>");
                     }
@@ -246,7 +255,7 @@
                         <div class="col-md-7"> 
                         
                             <div  class="panel panel-success" id="Busqueda">
-			     <div class="panel-heading"><input type="text" id="nombre" onkeyup="buscarTrabajador();" placeholder="Buscar Trabajador" class="form-control">  </div>
+                                <div class="panel-heading"><input type="text" autocomplete="off" id="nombre" onkeyup="buscarTrabajador();" placeholder="Buscar Trabajador" class="form-control">  </div>
 				<div class="panel-body" id="resultado">Busca un Empleado Para crear Un Registro.</div>
 		</div>
                             
