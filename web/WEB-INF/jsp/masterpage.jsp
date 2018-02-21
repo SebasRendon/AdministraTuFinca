@@ -45,7 +45,7 @@
     <body>
         <div class="container-fluid">
           
-            <nav class="navbar navbar-inverse" role="navigation">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <!-- El logotipo y el icono que despliega el menú se agrupan
        para mostrarlos mejor en los dispositivos móviles -->
   <div class="navbar-header">
