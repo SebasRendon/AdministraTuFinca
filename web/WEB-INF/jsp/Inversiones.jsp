@@ -105,7 +105,7 @@
              });
              }else
              {
-                 debugger
+                
                   var id=$('#id').val();
                 $.ajax({                    
                     type:'POST',

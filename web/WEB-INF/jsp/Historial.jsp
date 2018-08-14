@@ -10,9 +10,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
         <title>JSP Page</title>
          <script src="<c:url value="/public/jquery-3.3.1.min.js"></c:url>" type="text/javascript"></script>
- <script type="text/javascript">
+         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+            <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+           <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+        <script type="text/javascript">
            
            function pagarUnRegistro(idRegistro,opcion) {
                var cedula=$('#cedula').val();
@@ -41,11 +45,11 @@
         type: 'POST',
         data:"cedula="+cedula,
         success: function (data) {
-                     debugger
+                     
                     var _datosT = eval("[" + data.split("=").join(":") + "]");
                     for(var i=0;i<_datosT.length;i++)
                     {
-                        $('#contenido').append("<tr><td class='hidden'>"+_datosT[i].idRegistro+" </td><td>"+_datosT[i].fecha+" </td><td>"+_datosT[i].Kilos+" </td><td>"+_datosT[i].Fornales+" </td><td>"+_datosT[i].lote+" </td><td>"+_datosT[i].total+" </td><td><a href='#' onclick='pagarUnRegistro("+_datosT[i].idRegistro+",1)' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-pencil' aria-hidden='true'> Pagar</span></a> </td> </tr>");
+                        $('#contenido').append("<tr><td class='hidden'>"+_datosT[i].idRegistro+" </td><td>"+_datosT[i].fecha+" </td><td>"+_datosT[i].Kilos+" </td><td>"+_datosT[i].Fornales+" </td><td>"+_datosT[i].lote+" </td><td>"+new Intl.NumberFormat('es-MX').format(_datosT[i].total)+" </td><td><a href='#' onclick='pagarUnRegistro("+_datosT[i].idRegistro+",1)' class='btn btn-success btn-xs'><span class='glyphicon glyphicon-pencil' aria-hidden='true'> Pagar</span></a> </td> </tr>");
                     }
                     }
         
@@ -61,11 +65,12 @@
         type: 'POST',
         data:"cedula="+cedula,
         success: function (data) {
-                     debugger
+                     
                     var _datosT = eval("[" + data.split("=").join(":") + "]");
                     for(var i=0;i<_datosT.length;i++)
                     {
-                        $('#contenido').append("<tr><td class='hidden'>"+_datosT[i].idRegistro+" </td><td>"+_datosT[i].fecha+" </td><td>"+_datosT[i].Kilos+" </td><td>"+_datosT[i].Fornales+" </td><td>"+_datosT[i].lote+" </td><td>"+_datosT[i].total+" </td><td>Pagada</td> </tr>");
+                        
+                        $('#contenido').append("<tr><td class='hidden'>"+_datosT[i].idRegistro+" </td><td>"+_datosT[i].fecha+" </td><td>"+_datosT[i].Kilos+" </td><td>"+_datosT[i].Fornales+" </td><td>"+_datosT[i].lote+" </td><td>"+new Intl.NumberFormat('es-MX').format(_datosT[i].total)+" </td><td>Pagada</td> </tr>");
                     }
                     }
         
@@ -81,7 +86,7 @@
         success: function (data) {
                                      
                    
-  $('#contenido1').append("<tr><td>"+data+" </td></tr>");
+  $('#contenido1').append("<tr><td>"+new Intl.NumberFormat('es-MX').format(data)+" </td></tr>");
                     
                     }
         
@@ -94,6 +99,109 @@ function ocultarBoton() {
 function mostrarBoton() {
     $('#pagartodo').show()(true);
 }
+   function traerLotes()
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: "traerLotes.htm",
+                    success: function (data) {
+                       var _datosT = eval("[" + data.split("=").join(":") + "]"); 
+                       for(var i=0; i<data.length; i++)
+                       {
+                           $('#lotes').append("<option value="+_datosT[i].idLote+">"+_datosT[i].nombre+"</option>");
+                       }
+                       
+                    }
+                    
+                    
+                } );
+            }
+            function calcularmes() {
+              
+    
+
+$("#fechainicio").datepicker({
+firstDay: 1,
+dateFormat:'yy/mm/dd'
+});
+
+$("#fechafin").datepicker({
+firstDay: 1,
+dateFormat:'yy/mm/dd'
+});
+
+
+                debugger
+    
+    var dt = new Date();
+
+// Display the month, day, and year. getMonth() returns a 0-based number.
+var month = dt.getMonth()+1;
+var day = dt.getDate();
+var year = dt.getFullYear();
+var diasdelmes= diasEnUnMes(month,year);
+
+var fechaActual=year+"/"+ month+"/"+ day; 
+var fechainicial=year+"/"+ month+"/01";
+
+$( "#fechainicio" ).datepicker().val(fechainicial);
+$( "#fechafin" ).datepicker().val(fechaActual);
+                }
+                
+                function diasEnUnMes(mes, año) {
+	return new Date(año, mes, 0).getDate();
+}
+                
+                
+                
+            $(document).ready(function () {                
+          
+           
+              $("#filtroFechaLote").submit(function (e) {
+                  debugger
+              var cedula=$('#cedula').val();
+              var fechainicio=$('#fechainicio').val();
+              var fechafin=$('#fechafin').val();
+              var  idLote=$('#lotes').val();
+                  if(idLote==null)
+                  {
+                      idLote="";
+                  }
+              
+               e.preventDefault();
+              $('#contenidoBusqueda').html('');
+               $('#contenido2').html('');
+                    $.ajax({
+                 url: "filtrarlotefecha.htm",
+                 type: 'POST',
+                 data: "FechaInicio="+fechainicio+"&FechaFin="+fechafin+"&Cedula="+cedula+"&IdLote="+idLote,
+                 success: function (data) {
+                       
+                            var _datosT = eval("[" + data.split("=").join(":") + "]"); 
+                            
+                            var numero = _datosT[0].suma;
+                           
+                            
+                            
+                            $('#contenido2').append("<tr><td>"+new Intl.NumberFormat('es-MX').format(numero)+"</td></tr>")
+                     for(var i=0;i<_datosT.length;i++)
+                     {
+                     
+            $('#contenidoBusqueda').append("<tr><td>"+_datosT[i].fecha+"</td><td>"+_datosT[i].Kilos+"</td><td>"+_datosT[i].fornales+"</td><td>"+_datosT[i].Nombre+"</td><td>"+new Intl.NumberFormat('es-MX').format(_datosT[i].total)+"</td></tr>"); 
+                        
+                     }
+                      
+                        
+                       
+                    }
+            
+           
+             });
+          });
+           });
+          
+  
+            
             
         </script>    
     </head>
@@ -115,14 +223,16 @@ String nombre=request.getParameter("nombre");
                         <div class="panel-heading">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab1primary" onclick="FacturasxPagar(),SumarTotal(1),mostrarBoton();" data-toggle="tab">Cuentas sin Cancelar</a></li>
-                                    <li><a href="#tab2primary" data-toggle="tab" onclick="FacturasPagadas(),SumarTotal(2),ocultarBoton();">ver Cuentas Canceladas</a></li>
-                                    
+                                    <li><a href="#tab1primary" data-toggle="tab" onclick="FacturasPagadas(),SumarTotal(2),ocultarBoton();">ver Cuentas Canceladas</a></li>
+                                    <li><a href="#tab2primary" data-toggle="tab" onclick="traerLotes(),calcularmes();">Filtrar por fecha y lote</a></li>
                                     
                                 </ul>
                         </div>
-                     </div>
-                    </div>
-                <div class="col-md-11" >
+                      <div class="panel-body">
+                           <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1primary">
+                              
+                 <div class="col-md-11" >
                     
                     
 
@@ -143,6 +253,57 @@ String nombre=request.getParameter("nombre");
                         <tr><td> <button onclick="pagarUnRegistro(0,2)" id="pagartodo" class="btn btn-info btn-xs" >Pagar todo</button></td></tr>
                         </table>
                     </div>
+                            </div>
+                                <div class="tab-pane fade " id="tab2primary">
+                                    <div class="col-md-12">
+                                        
+                                        
+                                        <form id="filtroFechaLote" class="form-group">
+                                        <div class="col-md-3">
+                                            <p> Fecha inicio: <input type="text" class="form-control" id="fechainicio" required=""></p>
+                                        </div>
+                                         <div class="col-md-3">
+                                             <p> Fecha fin:  </br>   <input type="text" class="form-control" id="fechafin" required=""></p>
+                                        </div>
+                                         <div class="col-md-4">
+                                              <label>Seleccione Un Lote</label>
+                                                 <select id="lotes" size="2"  class="form-control" >                                            
+                                                 </select> 
+                                        </div>
+                                        </br>
+                                          <input class="btn btn-success" type="submit" value="buscar">
+                                    </form>    
+                                </div>
+                                         <div class="col-md-11" >
+                                             </br>
+                    
+
+                    <table class="table table-condensed">
+                        <tr><th>Fecha</th><th>Kilos</th><th>Fornales</th><th>Lote</th><th>Subtotal</th></tr>    
+                        <tbody id="contenidoBusqueda">
+                        
+                        </tbody>
+                    </table>
+                </div>    
+                    <div class="col-md-1" >
+                       
+                        <table class="table table-condensed">
+                            <tr><th>Total</th></tr>
+                            <tbody id="contenido2">
+                            
+                        </tbody>
+                        
+                        </table>
+                    </div>
+              
+                            </div>
+                                                              
+                             
+                               </div>
+                           </div>
+                     </div>
+                    </div>
+               
                 
                 
             </div>        

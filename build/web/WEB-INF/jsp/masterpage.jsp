@@ -22,16 +22,25 @@
         $('#menu1').addClass("active");
         $('#menu2').removeClass()("active");
         $('#menu3').removeClass()("active");
+        $('#menu4').removeClass("active");
         break;
         case 2:
         $('#menu1').removeClass("active");
         $('#menu2').addClass("active");
         $('#menu3').removeClass("active");
+        $('#menu4').removeClass("active");
         break;
         case 3:
         $('#menu1').removeClass("active");
         $('#menu2').removeClass("active");
         $('#menu3').addClass("active");
+        $('#menu4').removeClass("active");
+        break;
+        case 4:
+        $('#menu4').addClass("active");
+        $('#menu1').removeClass("active");
+        $('#menu2').removeClass("active");        
+        $('#menu3').removeClass("active");
         break;
 
     default:
@@ -63,9 +72,10 @@
        otro elemento que se pueda ocultar al minimizar la barra -->
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav">
-        <li  onclick="MenuActivo(1);" id="menu1"><a href="AddRegistros.htm">Crear Registro</a></li>
-      <li id="menu2" onclick="MenuActivo(2);"><a href="AgregarEmpleado.htm">Control de Empleados y Lotes</a></li>
-     <li id="menu3" onclick="MenuActivo(3);"><a href="Inversiones.htm">Control de Insumos</a></li>
+     <li id="menu1" onclick="MenuActivo(1);" ><a href="AddRegistros.htm">Crear Registro</a></li>
+     <li id="menu2" onclick="MenuActivo(2);"><a href="AgregarEmpleado.htm">Control de Empleados y Lotes</a></li>
+     <li id="menu3" onclick="MenuActivo(3);"><a href="Inversiones.htm">Control de Insumos</a></li>    
+     <li id="menu4" onclick="MenuActivo(4);"><a href="facturacion.htm">Informes</a></li>
     </ul>
  
   <ul class="nav navbar-nav navbar-right">

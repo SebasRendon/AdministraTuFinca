@@ -7,6 +7,7 @@ package com.finca.viewcontrollers;
 
 import com.finca.bussineslayer.InventarioBl;
 import com.finca.models.CantidadInsumos;
+import com.finca.models.FiltrarFechaLote;
 import com.finca.models.Insumos;
 import com.finca.models.Precios;
 import com.finca.models.SalidaInsumos;
@@ -46,6 +47,21 @@ public class InversionesController {
     return Resultado;
     }
 
+      @RequestMapping (value ="filtrarlotefecha.htm",method = RequestMethod.POST)
+    @ResponseBody String filtrarlotefecha(FiltrarFechaLote f )
+    {
+    String Resultado="";
+        try {
+          List Consulta=inventario.listarfechalote(f);
+            for(int i=0; i<Consulta.size();i++)
+            {
+                Resultado+=Consulta.get(i)+",";
+            }
+        } catch (Exception e) {
+            Resultado=e.getMessage();
+        }
+    return Resultado;
+    }
 
  
       @RequestMapping(value = "TraerInsumos.htm",method = RequestMethod.POST)

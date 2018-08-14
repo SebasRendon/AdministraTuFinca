@@ -7,6 +7,7 @@ package com.finca.bussineslayer;
 
 import com.finca.models.CantidadInsumos;
 import com.finca.models.Conectar;
+import com.finca.models.FiltrarFechaLote;
 import com.finca.models.Insumos;
 import com.finca.models.Precios;
 import com.finca.models.SalidaInsumos;
@@ -101,6 +102,20 @@ public class InventarioBl {
        
        return empleados;
     }
+         
+         public List listarfechalote(FiltrarFechaLote f )
+    {
+       
+        String SQl="select (select sum(total)  from\n" +
+" registros r inner join lotes l on r.idLote=l.idLote inner join trabajadores t on r.idTrabajador=t.idTrabajador where t.Cedula="+f.getCedula()+" and r.idLote like '%"+f.getIdLote()+"' and\n" +
+" CAST(r.fecha AS DATE) between '"+f.getFechaInicio()+"' AND '"+f.getFechaFin()+"' )suma, concat('\\'',r.fecha,'\\'')fecha, r.Kilos, r.fornales,concat('\\'',l.Nombre,'\\'')Nombre, r.total  from\n" +
+" registros r inner join lotes l on r.idLote=l.idLote inner join trabajadores t on r.idTrabajador=t.idTrabajador where t.Cedula="+f.getCedula()+" and r.idLote like '%"+f.getIdLote()+"' and\n" +
+" CAST(r.fecha AS DATE) between '"+f.getFechaInicio()+"' AND '"+f.getFechaFin()+"';";
+        List Resultado=this.jdbcTemplate.queryForList(SQl);
+        return Resultado;
+        
+    }    
+               
          
                 public List ListarInsumosSalida()
     {
