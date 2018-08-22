@@ -13,10 +13,40 @@
         
         <title>JSP Page</title>
          <script src="<c:url value="/public/jquery-3.3.1.min.js"></c:url>" type="text/javascript"></script>
-         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
             <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
            <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
         <script type="text/javascript">
+           
+           function getGET()
+    {
+       debugger
+        // capturamos la url
+        var loc = document.location.href;
+        // si existe el interrogante
+        if(loc.indexOf('?')>0)
+        {
+            // cogemos la parte de la url que hay despues del interrogante
+            var getString = loc.split('?')[1];
+            // obtenemos un array con cada clave=valor
+            var GET = getString.split('&');
+            var get = {};
+ 
+            // recorremos todo el array de valores
+            for(var i = 0, l = GET.length; i < l; i++){
+                var tmp = GET[i].split('=');
+                get[tmp[0]] = unescape(decodeURI(tmp[1]));
+            }
+            $("#cedula1").html(get.cedula);
+             $("#nombre1").html(get.nombre);
+            return get;
+            
+            
+        }
+    }
+ 
+ 
+           
            
            function pagarUnRegistro(idRegistro,opcion) {
                var cedula=$('#cedula').val();
@@ -99,54 +129,7 @@ function ocultarBoton() {
 function mostrarBoton() {
     $('#pagartodo').show()(true);
 }
-   function traerLotes()
-            {
-                $.ajax({
-                    type: 'POST',
-                    url: "traerLotes.htm",
-                    success: function (data) {
-                       var _datosT = eval("[" + data.split("=").join(":") + "]"); 
-                       for(var i=0; i<data.length; i++)
-                       {
-                           $('#lotes').append("<option value="+_datosT[i].idLote+">"+_datosT[i].nombre+"</option>");
-                       }
-                       
-                    }
-                    
-                    
-                } );
-            }
-            function calcularmes() {
-              
-    
-
-$("#fechainicio").datepicker({
-firstDay: 1,
-dateFormat:'yy/mm/dd'
-});
-
-$("#fechafin").datepicker({
-firstDay: 1,
-dateFormat:'yy/mm/dd'
-});
-
-
-                debugger
-    
-    var dt = new Date();
-
-// Display the month, day, and year. getMonth() returns a 0-based number.
-var month = dt.getMonth()+1;
-var day = dt.getDate();
-var year = dt.getFullYear();
-var diasdelmes= diasEnUnMes(month,year);
-
-var fechaActual=year+"/"+ month+"/"+ day; 
-var fechainicial=year+"/"+ month+"/01";
-
-$( "#fechainicio" ).datepicker().val(fechainicial);
-$( "#fechafin" ).datepicker().val(fechaActual);
-                }
+             
                 
                 function diasEnUnMes(mes, año) {
 	return new Date(año, mes, 0).getDate();
@@ -205,7 +188,7 @@ $( "#fechafin" ).datepicker().val(fechaActual);
             
         </script>    
     </head>
-    <body onload="FacturasxPagar(),SumarTotal(1);">
+    <body onload="FacturasxPagar(),SumarTotal(1),getGET(),calcularmes(1);">
              <%
 String cedula=request.getParameter("cedula");
 String nombre=request.getParameter("nombre");
@@ -217,14 +200,14 @@ String nombre=request.getParameter("nombre");
         
         <div class="container" >
             <div  class="row">
-                <h3 class="text-center"><%=nombre%><strong> <%=cedula%></strong> </h3> 
+                <h3 class="text-center"><label id="nombre1"></label><strong> <label id="cedula1"></label></strong> </h3> 
                 <div class="col-md-12" >
                  <div class="panel with-nav-tabs panel-primary">
                         <div class="panel-heading">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab1primary" onclick="FacturasxPagar(),SumarTotal(1),mostrarBoton();" data-toggle="tab">Cuentas sin Cancelar</a></li>
                                     <li><a href="#tab1primary" data-toggle="tab" onclick="FacturasPagadas(),SumarTotal(2),ocultarBoton();">ver Cuentas Canceladas</a></li>
-                                    <li><a href="#tab2primary" data-toggle="tab" onclick="traerLotes(),calcularmes();">Filtrar por fecha y lote</a></li>
+                                    <li><a href="#tab2primary" data-toggle="tab" onclick="traerLotes();">Filtrar por fecha y lote</a></li>
                                     
                                 </ul>
                         </div>
@@ -259,17 +242,18 @@ String nombre=request.getParameter("nombre");
                                         
                                         
                                         <form id="filtroFechaLote" class="form-group">
-                                        <div class="col-md-3">
-                                            <p> Fecha inicio: <input type="text" class="form-control" id="fechainicio" required=""></p>
+                                        <div class="col-md-2">
+                                            <p> Fecha inicio: <input type="text" autocomplete="off" class="form-control" id="fechainicio" required=""></p>
                                         </div>
-                                         <div class="col-md-3">
-                                             <p> Fecha fin:  </br>   <input type="text" class="form-control" id="fechafin" required=""></p>
+                                         <div class="col-md-2">
+                                             <p> Fecha fin:  </br>   <input type="text" autocomplete="off" class="form-control" id="fechafin" required=""></p>
                                         </div>
                                          <div class="col-md-4">
                                               <label>Seleccione Un Lote</label>
                                                  <select id="lotes" size="2"  class="form-control" >                                            
                                                  </select> 
                                         </div>
+                                           
                                         </br>
                                           <input class="btn btn-success" type="submit" value="buscar">
                                     </form>    

@@ -12,11 +12,57 @@
         <script src="<c:url value="/public/jquery-3.3.1.min.js"></c:url>" type="text/javascript"></script>
            <link href="<c:url value="/public/css/PanelInsumos.css"></c:url>  " rel="stylesheet" type="text/css"/>
         <script src="<c:url value="/public/js/bootstrap.js"></c:url> " type="text/javascript"></script>
+         
         <title>Master</title>
         <script type="text/javascript">
-            
+            function calcularmes(numero) { 
+debugger
+$("#fechainicio").datepicker({
+firstDay: 1,
+dateFormat:'yy/mm/dd'
+});
+
+$("#fechafin").datepicker({
+firstDay: 1,
+dateFormat:'yy/mm/dd'
+});
+     
+    var dt = new Date();
+// Display the month, day, and year. getMonth() returns a 0-based number.
+var month = dt.getMonth()+1;
+var day = dt.getDate();
+var year = dt.getFullYear();
+//var diasdelmes= diasEnUnMes(month,year);
+
+var fechaActual=year+"/"+ month+"/"+ day; 
+var fechainicial=year+"/"+ month+"/01";
+if(numero==1)
+{
+$( "#fechainicio" ).datepicker().val(fechainicial);
+$( "#fechafin" ).datepicker().val(fechaActual);
+    
+}
+
+                }
+             function traerLotes()
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: "traerLotes.htm",
+                    success: function (data) {
+                       var _datosT = eval("[" + data.split("=").join(":") + "]"); 
+                       for(var i=0; i<data.length; i++)
+                       {
+                           $('#lotes').append("<option value="+_datosT[i].idLote+">"+_datosT[i].nombre+"</option>");
+                       }
+                       
+                    }
+                    
+                    
+                } );
+            }
             function MenuActivo(opcion) {
-                debugger
+               
     switch (opcion) {
     case 1:
         $('#menu1').addClass("active");

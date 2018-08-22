@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/AdministraTuFinca/src/java/com/finca/viewcontrollers/InversionesController.java</file>
-            <file>file:/E:/AdministraTuFinca/web/WEB-INF/jsp/Historial.jsp</file>
-            <file>file:/E:/AdministraTuFinca/src/java/com/finca/bussineslayer/InventarioBl.java</file>
+            <file>file:/E:/AdministraTuFinca/web/WEB-INF/jsp/AgregarEmpleado.jsp</file>
+            <file>file:/E:/AdministraTuFinca/src/java/com/finca/bussineslayer/InformesInversiones.java</file>
+            <file>file:/E:/AdministraTuFinca/src/java/com/finca/viewcontrollers/infoInversionesController.java</file>
+            <file>file:/E:/AdministraTuFinca/web/WEB-INF/jsp/AddRegistros.jsp</file>
         </group>
     </open-files>
 </project-private>

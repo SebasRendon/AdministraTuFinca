@@ -25,13 +25,15 @@ public class InformesInversiones {
     
       public List informeGeneral(informegastos f)
     {
+        
+        
         String sql=" select ( select sum(total) from registros r inner join  trabajadores t on r.idTrabajador=t.idTrabajador\n" +
-"inner join lotes l on l.idLote=r.idLote  where r.cancelado=1 and l.idLote like'%'\n" +
+"inner join lotes l on l.idLote=r.idLote  where r.cancelado=1 and l.idLote like'%"+f.getIdlote()+"'\n" +
 " and t.Cedula like '%"+f.getCedula()+"' and cast(r.fecha as date)  between '"+f.getFechaInicio()+"' and '"+f.getFechaFin()+"') as 'total',\n" +
 " concat('\\'',l.Nombre,'\\'')lote, t.Cedula,concat('\\'',t.Nombre,'\\'')nombre,concat('\\'',r.fecha,'\\'')fecha, \n" +
 " r.Kilos, r.Fornales, r.total as 'subtotal' from registros r inner join\n" +
 " trabajadores t on r.idTrabajador=t.idTrabajador inner join lotes l on l.idLote=r.idLote  where r.cancelado=1 and l.idLote like'%"+f.getIdlote()+"'\n" +
-" and t.Cedula like '%"+f.getCedula()+"' and cast(r.fecha as date)  between '"+f.getFechaInicio()+"' and '"+f.getFechaFin()+"'; ";
+" and t.Cedula like '%"+f.getCedula()+"' and cast(r.fecha as date)  between '"+f.getFechaInicio()+"' and '"+f.getFechaFin()+"' order by r.fecha; ";
         List resultado=this.jdbcTemplate.queryForList(sql);
         return resultado;
     }
