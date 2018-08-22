@@ -12,7 +12,24 @@
         <title>JSP Page</title>
         
         <script type="text/javascript">
-            
+           function fechaActual() {
+    debugger
+    var d = new Date();
+
+var month = d.getMonth()+1;
+var day = d.getDate();
+var year=d.getFullYear();
+
+var fechaCompleta;
+
+    fechaCompleta=year+"-"+month+"-"+day;    
+
+$('#mostrarFechaActual').text('Fecha actual : '+fechaCompleta);
+}
+function Ingresofecha() {
+  $('#fechaRegistro').show();  
+}
+    
             $('body').keyup(function(e) {
     if(e.keyCode == 13) {
        var cri=$('#nombre').val();
@@ -27,6 +44,7 @@
             var contar=0;
             function ocultar()
             {
+                $('#fechaRegistro').hide();
                $('#seleccion').hide(true);
             }
             function cambiarEmpleado()
@@ -44,6 +62,12 @@
                 $('#Busqueda').hide(true);
                 $('#seleccion').show(true);
             }
+            function resetFormulario() {
+    $('#guardarRegistro')[0].reset();
+    $('#PrecioActual').html("");
+    $('#TotalaPagar').html("");
+    
+}
             function buscarTrabajador()
             {
                 contar++;
@@ -93,16 +117,17 @@
             
             function buscarTrabajadorAjax(parametro)
             {
-                   $('#resultado').html('');
+               
+                   
         $.ajax({
                     type: 'POST',
                     url: "BuscarTrabajador.htm",
                     data:"Criterio="+parametro,
                     
                     success: function (response) {
-                      
+                       debugger
                       var _datosT = eval("[" + response.split("=").join(":") + "]"); 
-                             
+                             $('#resultado').html('');
                             $('#resultado').append("<ul>");
                             if(response=="")
                             {
@@ -130,13 +155,14 @@
                if(tipoT==1)
                {
                    traerPrecio(1);
-                   $('#kilosoFornales').val('1');
-                   
+                   $('#kilosoFornales').val('1');                   
+                   $('#tipoContrato').text('Ingrese el Número de Kilogramos');
                }
                else if(tipoT==2)
                {
                    traerPrecio(2);
                     $('#kilosoFornales').val('2');
+                    $('#tipoContrato').text('Ingrese el Número de Fornales');
                }
             }
             
@@ -180,12 +206,14 @@
             $(document).ready(function () {
                   $("#guardarRegistro").submit(function (e) 
                   {
-                     
+                      debugger
+                     e.preventDefault();
                       var kilos=0;
                        var fornales=0;
                        var total=$('#TotoalPago').val();
                      var idTrabajador=$('#cedulaTrabajador').val();
                      var descripcion=$('#descripcionRegistro').val();
+                     var fecha=$('#fechaRegistro').val();
                      
                      if($('#kilosoFornales').val()==1)
                      {
@@ -206,11 +234,21 @@
                     $.ajax({
                          type: 'POST',
                         url: "GuardarRegistro.htm",
-                        data:"idRegistros="+0+"&idTrabajador="+idTrabajador+"&kilos="+kilos+"&Fornales="+fornales+"&idLote="+lote+"&Total="+total+"&cancelado="+0+"&Descripcion="+descripcion,
+                        data:"fecha="+fecha+"&idRegistro="+0+"&idTrabajador="+idTrabajador+"&kilos="+kilos+"&Fornales="+fornales+"&idLote="+lote+"&Total="+total+"&cancelado="+0+"&Descripcion="+descripcion,
                         success: function (data) {
-                        debugger
-                        alert(data);
-                        recargar();
+                       
+                       debugger
+                        if(data=="Guardado Con Exito")
+                        {
+                            confirmar();
+                            
+                        }
+                        else
+                        {
+                             
+                            alert("no guardo correctamente");
+                        }
+                        
                   
                     }
                         
@@ -236,10 +274,26 @@
              window.location.href = "Historial.htm?cedula="+cedula+"&nombre="+nombre;
     
 }
+
+function confirmar(){
+      //un confirm
+     
+      alertify.confirm("<p>Registro guardado con exito ¿Crear Nuevo Registro?</p>", function (e) {
+            if (e) {
+                  
+                  resetFormulario();
+            } else { 
+                        recargar();
+            }
+      }); 
+      return false
+}
+
+
             
         </script>
     </head>
-    <body onload="ocultar();traerLotes(),MenuActivo(1);">
+    <body onload="ocultar(),fechaActual(),traerLotes(),MenuActivo(1);">
         <input type="hidden" id="kilosoFornales">
         <input type="hidden" id="cedulaReal">
         <input type="hidden" id="cedulaTrabajador">
@@ -262,17 +316,42 @@
                 <div class="panel panel-success" id="seleccion">
                     <div class="panel-heading"><h2 id="nombreEmpleado"></h2><a class="btn btn-xs  btn-danger" href="AddRegistros.htm">Cancelar</a> <a class="btn btn-xs  btn-success" onclick="verHistorial();" href="#">Ver Historial</a></div>
                     <div class="panel-body" id="resultado">
-                        
+                      
+                         <div class="form-group row">
+                            <label  class="col-sm-4 form-label">Tipo de Trabajo</label>
+                            <div class="col-sm-8">
+                               
                         <select onChange="mostrarF();" required="" class="form-control" size="2"  id="tipoTrabajo">
-                            <option value="1">Kilos</option>
+                            <option value="1">Contrato</option>
                             <option value="2">Fornales</option>
                         </select>
-                        
+                            </div>
+                          </div>
                         <p id="PrecioActual"></p>
                         <br/>
-                        <input type="number" required="" min="0" placeholder="Ingrese Un numero" class="form-control" onblur="CalcularTotal();" id="numero">
-                        <p id="TotalaPagar"></p>
-                        <input type="text"  placeholder="Ingrese una Descrición es Opcional" class="form-control"  id="descripcionRegistro">
+                        
+                       
+                        <div class="form-group row">
+                            <label id="tipoContrato" class="col-sm-4 form-label"></label>
+                            <div class="col-sm-8">
+                                <input type="number" required="" min="0" step="0.5" placeholder="Ingrese Un numero" class="form-control" onblur="CalcularTotal();" id="numero">
+                            </div>
+                          </div>
+                         <p id="TotalaPagar"></p>
+                        
+                          <div class="form-group row">
+                            <label class="col-sm-4 form-label">Fecha de Trabajo</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" value="" id="fechaRegistro" >
+                                <label id="mostrarFechaActual"></label>
+                                <label class="btn btn-success btn-xs" onclick="Ingresofecha();">Cambiar</label>
+                                      
+                            </div>
+                          </div>
+                        
+                        <input type="text"  placeholder="Ingrese una Descrición es Opcional" class="form-control"  id="descripcionRegistro"> 
+                        
+                      
                         <h3 class="text-info">Seleccione un lote</h3>
                         <select id="lotes" size="5" required="" class="form-control">
                             

@@ -58,9 +58,18 @@ public class BuscarTrabajadorBL {
     
     public boolean guardarRegistro(Registros R)
     {
-        boolean guardar= false;
+       boolean guardar= false;
+        String fecha=R.getFecha();
         try {
-            this.jdbcTemplate.update("INSERT INTO registros(idTrabajador,Kilos,Fornales,idLote,total,cancelado,Descripcion)VALUES("+R.getIdTrabajador()+","+R.getKilos()+","+R.getFornales()+","+R.getIdLote()+","+R.getTotal()+","+R.isCancelado()+",'"+R.getDescripcion()+"');");
+            if(R.getFecha().equals(""))
+            {
+                this.jdbcTemplate.update("INSERT INTO registros(idTrabajador,Kilos,Fornales,idLote,total,cancelado,Descripcion)VALUES("+R.getIdTrabajador()+","+R.getKilos()+","+R.getFornales()+","+R.getIdLote()+","+R.getTotal()+","+R.isCancelado()+",'"+R.getDescripcion()+"');"); 
+            }
+            else
+            {
+                this.jdbcTemplate.update("INSERT INTO registros(idTrabajador,fecha,Kilos,Fornales,idLote,total,cancelado,Descripcion)VALUES("+R.getIdTrabajador()+",'"+R.getFecha()+"',"+R.getKilos()+","+R.getFornales()+","+R.getIdLote()+","+R.getTotal()+","+R.isCancelado()+",'"+R.getDescripcion()+"');"); 
+            }
+           
             guardar=true;
         } catch (Exception e) {
         }

@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -84,17 +85,12 @@ public class masterController {
       @RequestMapping(value = "GuardarRegistro.htm",method = RequestMethod.POST)
     public @ResponseBody String GuardarRegistro(Registros R)
     {
-        boolean guardar=false;
-        String finalR="";
-        try {
-           guardar=Buscar.guardarRegistro(R);
-          
-        } catch (Exception e) {
-        }
-        if(guardar)
+       String finalR="";
+        if(Buscar.guardarRegistro(R))
         {
-            finalR="Guardado Con Exito";
+             finalR="Guardado Con Exito";
         }
+       
         return  finalR;
     }
     

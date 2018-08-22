@@ -12,7 +12,9 @@
         <script src="<c:url value="/public/jquery-3.3.1.min.js"></c:url>" type="text/javascript"></script>
            <link href="<c:url value="/public/css/PanelInsumos.css"></c:url>  " rel="stylesheet" type="text/css"/>
         <script src="<c:url value="/public/js/bootstrap.js"></c:url> " type="text/javascript"></script>
-         
+          <script src="<c:url value="/public/js/alertify.js"></c:url> " type="text/javascript"></script>
+        <link href="<c:url value="/public/css/alertify.core.css"></c:url> " rel="stylesheet" type="text/css"/>
+        <link href="<c:url value="/public/css/alertify.default.css"></c:url> " rel="stylesheet" type="text/css"/>
         <title>Master</title>
         <script type="text/javascript">
             function calcularmes(numero) { 

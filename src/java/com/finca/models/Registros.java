@@ -11,9 +11,10 @@ package com.finca.models;
  */
 public class Registros {
     private int idRegistros;
+    private String fecha;
     private int idTrabajador;
     private int kilos;
-    private int Fornales;
+    private float Fornales;
     private int idLote;
     private float Total;
     private boolean cancelado; 
@@ -22,7 +23,9 @@ public class Registros {
     public Registros() {
     }
 
-    public Registros(int idTrabajador, int kilos, int Fornales, int idLote, float Total, boolean cancelado, String Descripcion) {
+    public Registros(int idRegistros, String fecha, int idTrabajador, int kilos, float Fornales, int idLote, float Total, boolean cancelado, String Descripcion) {
+        this.idRegistros = idRegistros;
+        this.fecha = fecha;
         this.idTrabajador = idTrabajador;
         this.kilos = kilos;
         this.Fornales = Fornales;
@@ -32,12 +35,32 @@ public class Registros {
         this.Descripcion = Descripcion;
     }
 
+    public Registros(String fecha, int idTrabajador, int kilos, float Fornales, int idLote, float Total, boolean cancelado, String Descripcion) {
+        this.fecha = fecha;
+        this.idTrabajador = idTrabajador;
+        this.kilos = kilos;
+        this.Fornales = Fornales;
+        this.idLote = idLote;
+        this.Total = Total;
+        this.cancelado = cancelado;
+        this.Descripcion = Descripcion;
+    }
+    
+
     public int getIdRegistros() {
         return idRegistros;
     }
 
     public void setIdRegistros(int idRegistros) {
         this.idRegistros = idRegistros;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public int getIdTrabajador() {
@@ -56,11 +79,11 @@ public class Registros {
         this.kilos = kilos;
     }
 
-    public int getFornales() {
+    public float getFornales() {
         return Fornales;
     }
 
-    public void setFornales(int Fornales) {
+    public void setFornales(float Fornales) {
         this.Fornales = Fornales;
     }
 
@@ -96,7 +119,8 @@ public class Registros {
         this.Descripcion = Descripcion;
     }
 
-   
+    
+
    
     
 }
